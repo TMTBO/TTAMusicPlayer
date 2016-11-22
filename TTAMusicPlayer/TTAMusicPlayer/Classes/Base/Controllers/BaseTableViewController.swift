@@ -11,6 +11,13 @@ import UIKit
 class BaseTableViewController: BaseViewController {
     var tableView : UITableView?
     
+    /// 所有要注册的 cell 的 reuseid 与类型对应的字典
+    var cells : [String : UITableViewCell.Type]? {
+        didSet {
+            registCells()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,7 +27,7 @@ class BaseTableViewController: BaseViewController {
         
         view.addSubview(tableView!)
         
-        registCells(with: ["cell" : UITableViewCell.self])
+        getMainData()
     }
 
     override func viewDidLayoutSubviews() {
@@ -31,10 +38,20 @@ class BaseTableViewController: BaseViewController {
     /// 注册 cell
     ///
     /// - Parameter cellIds: cellId 与 类对应的字典
-    func registCells(with cellIds : [String : UITableViewCell.Type]) {
-        for (cellID, cellClass) in cellIds {
+    func registCells() {
+        guard let cells = cells else {
+            return
+        }
+        for (cellID, cellClass) in cells {
             tableView?.register(cellClass, forCellReuseIdentifier: cellID)
         }
+    }
+}
+
+// MARK: - Data
+extension BaseViewController {
+    func getMainData() {
+        
     }
 }
 

@@ -1,0 +1,6 @@
+framework module Pods_TTAMusicPlayerUITests {
+  umbrella header "Pods-TTAMusicPlayerUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

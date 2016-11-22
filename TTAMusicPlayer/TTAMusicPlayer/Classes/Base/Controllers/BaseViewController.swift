@@ -15,20 +15,12 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
 
         setupUI()
-        getMainData()
     }
 }
 
 // MARK: - UI
 extension BaseViewController {
     func setupUI() {
-        
-    }
-}
-
-// MARK: - Data
-extension BaseViewController {
-    func getMainData() {
         
     }
 }
