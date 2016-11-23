@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>kTCCServiceMediaLibrary</key>
-	<string></string>
+	<string>音乐</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>音乐库</string>
 	<key>CFBundleDevelopmentRegion</key>

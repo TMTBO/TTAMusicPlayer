@@ -1,6 +1,6 @@
 //
 //  MainTabBarViewController.swift
-//  TTAMusicPlayer
+//  MusicPlayer
 //
 //  Created by ys on 16/11/22.
 //  Copyright © 2016年 YS. All rights reserved.
@@ -22,8 +22,8 @@ class MainTabBarViewController: UITabBarController {
     }
     
     func configTabBarController() {
-        config(chiledVc: TTAPlayerViewController(), title: "Music", imageName: "music")
-        config(chiledVc: TTAMusicListViewController(), title: "MusicList", imageName: "music_list")
+        config(chiledVc: PlayerViewController(), title: "Music", imageName: "music")
+        config(chiledVc: MusicListViewController(), title: "MusicList", imageName: "music_list")
     }
     
     private func config(chiledVc : BaseViewController, title : String, imageName : String) {

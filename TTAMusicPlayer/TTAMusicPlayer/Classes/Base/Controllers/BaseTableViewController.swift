@@ -25,6 +25,8 @@ class BaseTableViewController: BaseViewController {
         tableView?.dataSource = self
         tableView?.delegate = self
         
+        tableView?.tableFooterView = UIView()
+        
         view.addSubview(tableView!)
         
         getMainData()
