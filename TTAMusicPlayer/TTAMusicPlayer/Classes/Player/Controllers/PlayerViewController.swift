@@ -9,7 +9,7 @@
 import UIKit
 import MediaPlayer
 
-class PlayerViewController: BaseViewController {
+class PlayerViewController: BaseViewController{
     var music : MPMediaItem? {
         didSet {
             let bgImage = music?.artwork?.image(at: view.bounds.size)
@@ -54,13 +54,7 @@ class PlayerViewController: BaseViewController {
     
     override func setupUI() {
         playerView = PlayerView(frame: view.bounds)
-        
-        playerView?.playMusicClosure = {
-            self.playMusic()
-        }
-        playerView?.pauseMusicClosure = {
-            self.pauseMusic()
-        }
+        playerView?.delegate = self
         
         configNavcBar()
         self.view.addSubview(playerView!)
@@ -95,7 +89,6 @@ class PlayerViewController: BaseViewController {
 }
 
 extension PlayerViewController {
-    
     /// 播放
     func playMusic() {
         PlayerManager.sharedPlayerManager.play(music: music)
@@ -104,5 +97,15 @@ extension PlayerViewController {
     /// 暂停
     func pauseMusic() {
         PlayerManager.sharedPlayerManager.pause()
+    }
+}
+
+// MARK: - PlayerViewDelegate
+extension PlayerViewController : PlayerViewDelegate {
+    func playerView(_ playerView: PlayerView, didClickPlay: UIButton) {
+        playMusic()
+    }
+    func playerView(_ playerView: PlayerView, didClickPause: UIButton) {
+        pauseMusic()
     }
 }

@@ -8,12 +8,20 @@
 
 import UIKit
 
+protocol PlayerViewDelegate: NSObjectProtocol {
+    func playerView(_ playerView : PlayerView, didClickPlay : UIButton)
+    func playerView(_ playerView : PlayerView, didClickPause: UIButton)
+}
+
 class PlayerView: UIView {
     
     var playAndPauseButton : UIButton? = UIButton()
     
-    var playMusicClosure : (() -> ())? = nil
-    var pauseMusicClosure: (() -> ())? = nil
+//    weak var delegate : PlayerViewDelegate?
+    weak var delegate : PlayerViewDelegate?
+    
+//    var playMusicClosure : (() -> ())? = nil
+//    var pauseMusicClosure: (() -> ())? = nil
     
 
     override init(frame: CGRect) {
@@ -39,17 +47,11 @@ extension PlayerView {
         configPlayButton()
         playAndPauseButton?.tta_addTarget(for: .touchUpInside, actionClosure: { (sender) in
             if PlayerManager.sharedPlayerManager.isPlaying {
-                guard let pauseMusic = self.pauseMusicClosure else {
-                    return
-                }
+                self.delegate?.playerView(self, didClickPause: self.playAndPauseButton!)
                 self.configPauseButton()
-                pauseMusic()
             } else {
-                guard let playMusic = self.playMusicClosure else {
-                    return
-                }
+                self.delegate?.playerView(self, didClickPlay: self.playAndPauseButton!)
                 self.configPlayButton()
-                playMusic()
             }
         })
         
