@@ -19,14 +19,14 @@ class MusicListViewController: BaseTableViewController {
     }
     
     func item(at indexPaht : IndexPath) -> MPMediaItem {
-        return PlayerManager.sharedPlayerManager.musics[indexPaht.row]
+        return PlayerManager.shared.musics[indexPaht.row]
     }
 }
 
 // MARK: - UITableViewController
 extension MusicListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return PlayerManager.sharedPlayerManager.musics.count
+        return PlayerManager.shared.musics.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

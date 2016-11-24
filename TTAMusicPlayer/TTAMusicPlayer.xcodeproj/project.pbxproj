@@ -11,7 +11,6 @@
 		3763C7C41DE5432A005E47E9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3763C7C31DE5432A005E47E9 /* MediaPlayer.framework */; };
 		3763C7C61DE55033005E47E9 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763C7C51DE55033005E47E9 /* PlayerView.swift */; };
 		3763C7C81DE551E5005E47E9 /* GlobalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763C7C71DE551E5005E47E9 /* GlobalConfig.swift */; };
-		3763C7CD1DE5623C005E47E9 /* UIButton+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3763C7CC1DE5623C005E47E9 /* UIButton+Common.swift */; };
 		3767354E1DE4436600D0E7C3 /* MusicListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3767354D1DE4436600D0E7C3 /* MusicListTableViewCell.swift */; };
 		3792C0EC1DE3EFCF0038B04C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3792C0EB1DE3EFCF0038B04C /* AppDelegate.swift */; };
 		3792C0F31DE3EFCF0038B04C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3792C0F21DE3EFCF0038B04C /* Assets.xcassets */; };
@@ -29,6 +28,8 @@
 		37C309951DE43297007A382A /* MusicListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C309941DE43297007A382A /* MusicListViewController.swift */; };
 		41AE33A5CCC23F55EFFA5B89 /* Pods_TTAMusicPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB3E66EDFDA67FF063F303A /* Pods_TTAMusicPlayer.framework */; };
 		6DF7B0D87135894736A6656F /* Pods_TTAMusicPlayerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BD20DBD64D489C1C9BBFE8 /* Pods_TTAMusicPlayerUITests.framework */; };
+		795C57FB1DE7336300ECFC89 /* UIImage+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C57FA1DE7336300ECFC89 /* UIImage+Common.swift */; };
+		795C57FD1DE73BB300ECFC89 /* String+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C57FC1DE73BB300ECFC89 /* String+Common.swift */; };
 		A755AF6E141BD02501E9CC90 /* Pods_TTAMusicPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189BE51E82852091D4A38A07 /* Pods_TTAMusicPlayerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,7 +57,6 @@
 		3763C7C31DE5432A005E47E9 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		3763C7C51DE55033005E47E9 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		3763C7C71DE551E5005E47E9 /* GlobalConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConfig.swift; sourceTree = "<group>"; };
-		3763C7CC1DE5623C005E47E9 /* UIButton+Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Common.swift"; sourceTree = "<group>"; };
 		3767354D1DE4436600D0E7C3 /* MusicListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicListTableViewCell.swift; sourceTree = "<group>"; };
 		3792C0E81DE3EFCF0038B04C /* TTAMusicPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TTAMusicPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3792C0EB1DE3EFCF0038B04C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +81,8 @@
 		4FB3E66EDFDA67FF063F303A /* Pods_TTAMusicPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TTAMusicPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD0DA52790633E84E16C880 /* Pods-TTAMusicPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TTAMusicPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TTAMusicPlayer/Pods-TTAMusicPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		76515C8CC840E1409A8DBD7A /* Pods-TTAMusicPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TTAMusicPlayerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TTAMusicPlayerUITests/Pods-TTAMusicPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		795C57FA1DE7336300ECFC89 /* UIImage+Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Common.swift"; path = "../../../../../../../../../../Volumes/Tobyo/20160220/20160410/20160620实用技术/20160630音乐播放器/代码 /10-简单的音乐播放器-来电中断/UIImage+Common.swift"; sourceTree = "<group>"; };
+		795C57FC1DE73BB300ECFC89 /* String+Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Common.swift"; path = "../../../../../../../../../../Volumes/Tobyo/20160220/20160410/20160620实用技术/20160630音乐播放器/代码 /10-简单的音乐播放器-来电中断/String+Common.swift"; sourceTree = "<group>"; };
 		7BB2AE8C73274C00D8F0882D /* Pods-TTAMusicPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TTAMusicPlayerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TTAMusicPlayerTests/Pods-TTAMusicPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A6A471E2677C5B3BCDD4E14F /* Pods-TTAMusicPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TTAMusicPlayerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TTAMusicPlayerUITests/Pods-TTAMusicPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BB8A9481AAF97C300316F221 /* Pods-TTAMusicPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TTAMusicPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-TTAMusicPlayer/Pods-TTAMusicPlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -133,7 +135,8 @@
 		3763C7C91DE561E3005E47E9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				3763C7CC1DE5623C005E47E9 /* UIButton+Common.swift */,
+				795C57FA1DE7336300ECFC89 /* UIImage+Common.swift */,
+				795C57FC1DE73BB300ECFC89 /* String+Common.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -617,12 +620,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				37C3098A1DE41C86007A382A /* MainTabBarViewController.swift in Sources */,
+				795C57FB1DE7336300ECFC89 /* UIImage+Common.swift in Sources */,
 				37C3098C1DE425B1007A382A /* PlayerViewController.swift in Sources */,
 				3792C1291DE3F3460038B04C /* BaseTableViewController.swift in Sources */,
 				37C309931DE43033007A382A /* Music.swift in Sources */,
 				3792C0EC1DE3EFCF0038B04C /* AppDelegate.swift in Sources */,
 				3792C1271DE3F31B0038B04C /* BaseViewController.swift in Sources */,
-				3763C7CD1DE5623C005E47E9 /* UIButton+Common.swift in Sources */,
+				795C57FD1DE73BB300ECFC89 /* String+Common.swift in Sources */,
 				37C309951DE43297007A382A /* MusicListViewController.swift in Sources */,
 				3767354E1DE4436600D0E7C3 /* MusicListTableViewCell.swift in Sources */,
 				3763C7C81DE551E5005E47E9 /* GlobalConfig.swift in Sources */,

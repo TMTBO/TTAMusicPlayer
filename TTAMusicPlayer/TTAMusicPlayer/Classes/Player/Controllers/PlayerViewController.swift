@@ -21,7 +21,7 @@ class PlayerViewController: BaseViewController{
     var bgImageView : UIImageView?
     var titleLabel : UILabel?
     
-    
+    var timer : Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +36,10 @@ class PlayerViewController: BaseViewController{
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        configMusicInfo()
+        let playingMusic = PlayerManager.shared.musics[PlayerManager.shared.playingIndex]
+        music = music == playingMusic ? music : playingMusic
  
-        PlayerManager.sharedPlayerManager.delegate = self
+        PlayerManager.shared.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -69,7 +70,7 @@ extension PlayerViewController {
         
         // lineView
         let lineView = UIView(frame: CGRect(x: 0, y: 64, width: kSCREEN_WIDTH, height: 1.0 / kSCREEN_SCALE))
-        lineView.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lineView.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         
         // titleView
         titleLabel = UILabel()
@@ -128,24 +129,41 @@ extension PlayerViewController {
 extension PlayerViewController {
     /// 播放
     func playMusic() {
-        guard let newMusic = music else {
-            PlayerManager.sharedPlayerManager.play(music : PlayerManager.sharedPlayerManager.musics[0])
-            return
+        if let newMusic = music {
+            PlayerManager.shared.play(music : newMusic)
+        } else {
+            PlayerManager.shared.play(music : PlayerManager.shared.musics[0])
         }
-        PlayerManager.sharedPlayerManager.play(music : newMusic)
+        playerView?.updateDurationTime()
+        startTimer()
     }
-    
     /// 暂停
     func pauseMusic() {
-        PlayerManager.sharedPlayerManager.pause()
+        PlayerManager.shared.pause()
+        stopTimer()
     }
     /// 下一曲
     func nextMusic() {
-        PlayerManager.sharedPlayerManager.next()
+        PlayerManager.shared.next()
     }
     /// 上一曲
     func previousMusic() {
-        PlayerManager.sharedPlayerManager.previous()
+        PlayerManager.shared.previous()
+    }
+}
+
+// MARK: - Timer
+extension PlayerViewController {
+    func startTimer() {
+        guard timer == nil else {
+            return
+        }
+        timer = Timer.scheduledTimer(timeInterval: 0.25, target: playerView!, selector: #selector(playerView?.updateProgressAndTime), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 
@@ -163,11 +181,20 @@ extension PlayerViewController : PlayerViewDelegate {
     func playerView(_ playerView: PlayerView, preview: UIButton) {
         previousMusic()
     }
+    func playerView(_ playerView: PlayerView, pressProgressSliedr: UISlider) {
+        print("pressProgressSliedr")
+    }
+    func playerView(_ playerView: PlayerView, progressSliderValueChanged: UISlider) {
+        print("progressSliderValueChanged")
+    }
+    func playerView(_ playerView: PlayerView, upInsideProgressSlider: UISlider) {
+        print("upInsideProgressSlider")
+    }
 }
 
 // MARK: - PlayerManagerDelegate
 extension PlayerViewController : PlayerManagerDelegate {
-    func playerManage(_ playerManager: PlayerManager, playingMusic: MPMediaItem) {
+    func playerManager(_ playerManager: PlayerManager, playingMusic: MPMediaItem) {
         self.music = playingMusic
     }
 }

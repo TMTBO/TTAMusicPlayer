@@ -10,12 +10,14 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
+let kNONE_TIME = "00:00"
+
 @objc protocol PlayerManagerDelegate : NSObjectProtocol {
-    @objc optional func playerManage(_ playerManager : PlayerManager, playingMusic : MPMediaItem)
+    @objc optional func playerManager(_ playerManager : PlayerManager, playingMusic : MPMediaItem)
 }
 
 class PlayerManager: NSObject {
-    static let sharedPlayerManager = PlayerManager()
+    static let shared = PlayerManager()
     weak var delegate : PlayerManagerDelegate?
     /// 播放器
     var audioPlayer : AVAudioPlayer?
@@ -23,6 +25,27 @@ class PlayerManager: NSObject {
     var musics : [MPMediaItem] = []
     /// 当前正在播放的音乐索引
     var playingIndex : NSInteger = 0
+    
+    var currentTimeString : String {
+        get {
+            return getTimeString(with: audioPlayer?.currentTime)
+        }
+    }
+    var durationTimeString : String {
+        get {
+            return getTimeString(with: audioPlayer?.duration)
+        }
+    }
+    var currentTime : Float {
+        get {
+            return Float(self.audioPlayer?.currentTime ?? 0.0)
+        }
+    }
+    var durationTime : Float {
+        get {
+            return Float(self.audioPlayer?.duration ?? 0.0)
+        }
+    }
     
     /// 是否正在播放
     var isPlaying : Bool {
@@ -52,6 +75,15 @@ class PlayerManager: NSObject {
         let allMusic = MPMediaQuery.songs()
         musics = allMusic.items!
     }
+    
+    /// 根据当播放器的时间转为字符串
+    func getTimeString(with timeInterval : TimeInterval?) -> String {
+        guard let currentTimeInterval = timeInterval else {
+            return kNONE_TIME
+        }
+        let currentTime = String.tta_string(from: currentTimeInterval, with: "mm:ss")
+        return currentTime ?? kNONE_TIME
+    }
 }
 
 
@@ -70,6 +102,7 @@ extension PlayerManager {
                 self.playingIndex = index
             }
             switchPlayerMusicInfo()
+            updateLockScreen()
         }
         audioPlayer?.play()
         print("PlayMusic: \(music.title!)")
@@ -101,8 +134,8 @@ extension PlayerManager {
     }
     /// 切换播放器音乐信息
     func switchPlayerMusicInfo() {
-        if let _ = self.delegate?.responds(to: #selector(self.delegate?.playerManage(_:playingMusic:))) {
-            self.delegate?.playerManage?(self, playingMusic: musics[playingIndex])
+        if let _ = self.delegate?.responds(to: #selector(self.delegate?.playerManager(_:playingMusic:))) {
+            self.delegate?.playerManager?(self, playingMusic: musics[playingIndex])
         }
     }
 }
@@ -123,6 +156,7 @@ extension PlayerManager {
     
     func updateLockScreen() {
         let music = musics[playingIndex]
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle : music.title ?? "Music", MPMediaItemPropertyAlbumTitle : music.albumTitle ?? "Playing",MPMediaItemPropertyArtist : music.artist ?? "TTAMusicPlayer",MPMediaItemPropertyPlaybackDuration : music.playbackDuration,MPMediaItemPropertyArtwork : music.artwork ?? MPMediaItemArtwork(image: #imageLiteral(resourceName: "cm2_default_cover_play"))]
     }
 }
 
