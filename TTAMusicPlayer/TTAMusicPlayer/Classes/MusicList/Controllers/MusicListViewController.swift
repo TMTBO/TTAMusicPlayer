@@ -10,31 +10,23 @@ import UIKit
 import MediaPlayer
 
 class MusicListViewController: BaseTableViewController {
-    
-    var musics : [MPMediaItem] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView?.rowHeight = 60 * kSCALEP
-        
-        cells = ["music_list_cell" : MusicLisbleViewCell.self]
-    }
 
-    override func getMainData() {
-        let allMusic = MPMediaQuery.songs()
-        musics = allMusic.items!
-        tableView?.reloadData()
+        cells = ["music_list_cell" : MusicLisbleViewCell.self]
     }
     
     func item(at indexPaht : IndexPath) -> MPMediaItem {
-        return musics[indexPaht.row]
+        return PlayerManager.sharedPlayerManager.musics[indexPaht.row]
     }
 }
 
 // MARK: - UITableViewController
 extension MusicListViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return musics.count
+        return PlayerManager.sharedPlayerManager.musics.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
