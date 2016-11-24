@@ -38,6 +38,7 @@ class PlayerManager: NSObject {
     override init() {
         super.init()
         getMainData()
+        useRemoteControlEvent()
     }
     
     override class func initialize() {
@@ -90,7 +91,7 @@ extension PlayerManager {
         play(music: musics[nextIndex])
     }
     /// 上一曲
-    func preview() {
+    func previous() {
         var nextIndex = playingIndex - 1
         if nextIndex < 0 {
             nextIndex = musics.count - 1
@@ -103,6 +104,25 @@ extension PlayerManager {
         if let _ = self.delegate?.responds(to: #selector(self.delegate?.playerManage(_:playingMusic:))) {
             self.delegate?.playerManage?(self, playingMusic: musics[playingIndex])
         }
+    }
+}
+
+// MARK: - RemoteControl
+extension PlayerManager {
+    func useRemoteControlEvent() {
+        let center = MPRemoteCommandCenter.shared()
+        center.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            print("RemoteControl Play")
+            self.play(music: self.musics[self.playingIndex])
+            return MPRemoteCommandHandlerStatus.success
+        }
+        center.pauseCommand.addTarget(self, action: #selector(pause))
+        center.nextTrackCommand.addTarget(self, action: #selector(next))
+        center.previousTrackCommand.addTarget(self, action: #selector(previous))
+    }
+    
+    func updateLockScreen() {
+        let music = musics[playingIndex]
     }
 }
 

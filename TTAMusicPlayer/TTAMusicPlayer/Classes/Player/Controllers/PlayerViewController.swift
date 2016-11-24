@@ -35,6 +35,8 @@ class PlayerViewController: BaseViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        configMusicInfo()
  
         PlayerManager.sharedPlayerManager.delegate = self
     }
@@ -122,10 +124,12 @@ extension PlayerViewController {
     }
 }
 
+// MARK: - Player Control
 extension PlayerViewController {
     /// 播放
     func playMusic() {
         guard let newMusic = music else {
+            PlayerManager.sharedPlayerManager.play(music : PlayerManager.sharedPlayerManager.musics[0])
             return
         }
         PlayerManager.sharedPlayerManager.play(music : newMusic)
@@ -140,8 +144,8 @@ extension PlayerViewController {
         PlayerManager.sharedPlayerManager.next()
     }
     /// 上一曲
-    func previewMusic() {
-        PlayerManager.sharedPlayerManager.preview()
+    func previousMusic() {
+        PlayerManager.sharedPlayerManager.previous()
     }
 }
 
@@ -157,7 +161,7 @@ extension PlayerViewController : PlayerViewDelegate {
         nextMusic()
     }
     func playerView(_ playerView: PlayerView, preview: UIButton) {
-        previewMusic()
+        previousMusic()
     }
 }
 
