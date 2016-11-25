@@ -15,9 +15,6 @@ let kICON_IMAGE_ROTATION_KEY = "iconImageViewRotation"
     @objc optional func playerView(_ playerView : PlayerView, pause: UIButton)
     @objc optional func playerView(_ playerView : PlayerView, next : UIButton)
     @objc optional func playerView(_ playerView : PlayerView, preview : UIButton)
-    @objc optional func playerView(_ playerView : PlayerView, pressProgressSliedr : UISlider)
-    @objc optional func playerView(_ playerView : PlayerView, progressSliderValueChanged : UISlider)
-    @objc optional func playerView(_ playerView : PlayerView, upInsideProgressSlider : UISlider)
 }
 
 class PlayerView: UIView {
@@ -200,9 +197,7 @@ extension PlayerView {
 /** ------------------- progressSlider -------------------------- */
     /// 点击事件    停止定时器
     func pressAction(slider : UISlider) {
-        if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:pressProgressSliedr:))) {
-            delegate?.playerView?(self, pressProgressSliedr: progressSlider!)
-        }
+        PlayerManager.shared.stopTimer()
     }
     /// 拖动事件    更新播放时间与进度条
     func valueChangedAction(slider : UISlider) {
@@ -214,9 +209,7 @@ extension PlayerView {
     /// 松开手指事件  设置播放时间,开启定时器
     func upInsideAction(slider : UISlider) {
         PlayerManager.shared.currentTime = slider.value
-        if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:upInsideProgressSlider:))) {
-            delegate?.playerView?(self, upInsideProgressSlider: progressSlider!)
-        }
+        PlayerManager.shared.startTimer()
     }
 /** ------------------- iconImageView动画 -------------------------- */
     func startIconImageViewAnmation() {
