@@ -20,8 +20,6 @@ class PlayerViewController: BaseViewController{
     var playerView : PlayerView?
     var bgImageView : UIImageView?
     var titleLabel : UILabel?
-    
-//    var timer : Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,6 +117,7 @@ extension PlayerViewController {
         // background
         let bgImage = music?.artwork?.image(at: view.bounds.size)
         view.layer.contents = bgImage == nil ? #imageLiteral(resourceName: "cm2_default_play_bg").cgImage : bgImage?.cgImage
+        playerView?.configIconImageView(with: bgImage ?? #imageLiteral(resourceName: "cm2_default_play_bg"))
         // title
         configNavcTitle()
     }
@@ -134,12 +133,10 @@ extension PlayerViewController {
             PlayerManager.shared.play(music : PlayerManager.shared.musics[0])
         }
         playerView?.updateDurationTime()
-//        startTimer()
     }
     /// 暂停
     func pauseMusic() {
         PlayerManager.shared.pause()
-//        stopTimer()
     }
     /// 下一曲
     func nextMusic() {
@@ -151,20 +148,6 @@ extension PlayerViewController {
     }
 }
 
-//// MARK: - Timer
-//extension PlayerViewController {
-//    func startTimer() {
-//        guard timer == nil else {
-//            return
-//        }
-//        timer = Timer.scheduledTimer(timeInterval: 0.25, target: playerView!, selector: #selector(playerView?.updateProgressAndTime), userInfo: nil, repeats: true)
-//    }
-//    
-//    func stopTimer() {
-//        timer?.invalidate()
-//        timer = nil
-//    }
-//}
 
 // MARK: - PlayerViewDelegate
 extension PlayerViewController : PlayerViewDelegate {
@@ -180,14 +163,6 @@ extension PlayerViewController : PlayerViewDelegate {
     func playerView(_ playerView: PlayerView, preview: UIButton) {
         previousMusic()
     }
-//    func playerView(_ playerView: PlayerView, pressProgressSliedr: UISlider) {
-//        stopTimer()
-//        print("pressProgressSliedr")
-//    }
-//    func playerView(_ playerView: PlayerView, upInsideProgressSlider: UISlider) {
-//        startTimer()
-//        print("upInsideProgressSlider")
-//    }
 }
 
 // MARK: - PlayerManagerDelegate

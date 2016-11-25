@@ -8,6 +8,8 @@
 
 import UIKit
 
+let kICON_IMAGE_ROTATION_KEY = "iconImageViewRotation"
+
 @objc protocol PlayerViewDelegate: NSObjectProtocol {
     @objc optional func playerView(_ playerView : PlayerView, play : UIButton)
     @objc optional func playerView(_ playerView : PlayerView, pause: UIButton)
@@ -28,6 +30,8 @@ class PlayerView: UIView {
     var progressSlider : UISlider? = UISlider()
     var currentTimeLabel : UILabel? = UILabel()
     var durationTimeLabel : UILabel? = UILabel()
+    var iconImageView : UIImageView? = UIImageView()
+    
     /// 更新播放器显示的最大时间
     lazy var updateDurationTime : () -> Void = { _ in
         self.progressSlider?.maximumValue = PlayerManager.shared.durationTime
@@ -69,12 +73,12 @@ extension PlayerView {
         
         currentTimeLabel?.font = UIFont.systemFont(ofSize: 15 * kSCALEP)
         currentTimeLabel?.textAlignment = .center
-        currentTimeLabel?.text = "00:00"
+        currentTimeLabel?.text = kNONE_TIME
         
         durationTimeLabel?.font = UIFont.systemFont(ofSize: 15 * kSCALEP)
         durationTimeLabel?.textAlignment = .center
         durationTimeLabel?.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        durationTimeLabel?.text = "00:00"
+        durationTimeLabel?.text = kNONE_TIME
         
         progressSlider?.setMinimumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_curr").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
         progressSlider?.setMaximumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_ready").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
@@ -91,6 +95,7 @@ extension PlayerView {
         self.addSubview(currentTimeLabel!)
         self.addSubview(durationTimeLabel!)
         self.addSubview(progressSlider!)
+        self.addSubview(iconImageView!)
         
         // layout
         playAndPauseButton?.snp.makeConstraints({ (make) in
@@ -121,6 +126,10 @@ extension PlayerView {
             make.right.equalTo(self).offset(-12 * kSCALEP)
             make.width.equalTo(50 * kSCALEP)
         })
+        iconImageView?.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).offset(-50 * kSCALEP)
+        }
     }
     /// 配置播放按钮图片
     func configPlayButton() {
@@ -139,6 +148,11 @@ extension PlayerView {
         progressSlider?.setValue(PlayerManager.shared.currentTime, animated: true)
         currentTimeLabel?.text = PlayerManager.shared.currentTimeString
     }
+    /// 配置播放器中间的歌曲图片
+    func configIconImageView(with image : UIImage) {
+        let iconImage = image.tta_clip(image: image, with: CGRect(x: 0, y: 0, width: 215 * kSCALEP, height: 215 * kSCALEP))
+        iconImageView?.image = #imageLiteral(resourceName: "cm2_play_disc").tta_combineAtCenter(with: iconImage!)
+    }
 }
 
 // MARK: - Actions
@@ -149,10 +163,12 @@ extension PlayerView {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:pause:))) else { return }
             self.delegate?.playerView?(self, pause: self.playAndPauseButton!)
             self.configPauseButton()
+            stopIconImageViewAnmation()
         } else {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:play:))) else { return }
             self.delegate?.playerView?(self, play: self.playAndPauseButton!)
             self.configPlayButton()
+            startIconImageViewAnmation()
         }
     }
     /// 下一曲
@@ -189,5 +205,37 @@ extension PlayerView {
         if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:upInsideProgressSlider:))) {
             delegate?.playerView?(self, upInsideProgressSlider: progressSlider!)
         }
+    }
+/** ------------------- iconImageView动画 -------------------------- */
+    func startIconImageViewAnmation() {
+//        if let currentAnimation = iconImageView?.layer.animation(forKey: kICON_IMAGE_ROTATION_KEY) {
+//            currentAnimation.speed = 1.0
+////            let pauseTime = iconImageView?.layer.timeOffset
+////            iconImageView?.layer.speed = 1.0
+////            iconImageView?.layer.beginTime = (iconImageView?.layer.convertTime(CACurrentMediaTime(), from: nil))! - pauseTime!
+//            return
+//        }
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        animation.duration = 20
+        animation.toValue = 2 * M_PI
+        animation.repeatCount = MAXFLOAT
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        animation.speed = 1.0
+        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
+    }
+    func stopIconImageViewAnmation() {
+//        let animation = iconImageView?.layer.animation(forKey: kICON_IMAGE_ROTATION_KEY)
+//        animation?.speed = 0.0
+//        iconImageView?.layer.speed = 0.0
+//        iconImageView?.layer.timeOffset = (iconImageView?.layer.convertTime(CACurrentMediaTime(), from: nil))!
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        animation.duration = 20
+        animation.toValue = 2 * M_PI
+        animation.repeatCount = MAXFLOAT
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        animation.speed = 0.0
+        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
     }
 }

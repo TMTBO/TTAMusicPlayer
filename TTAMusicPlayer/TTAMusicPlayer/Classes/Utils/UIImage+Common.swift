@@ -19,6 +19,16 @@ extension UIImage {
         self.draw(in: CGRect(origin: CGPoint.zero, size: size))
         image.draw(at: point)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         return newImage
+    }
+    
+    func tta_clip(image : UIImage, with rect : CGRect) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, kSCREEN_SCALE)
+        let ctx = UIGraphicsGetCurrentContext()
+        ctx?.addEllipse(in: rect)
+        ctx?.clip()
+        image.draw(in: rect)
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
