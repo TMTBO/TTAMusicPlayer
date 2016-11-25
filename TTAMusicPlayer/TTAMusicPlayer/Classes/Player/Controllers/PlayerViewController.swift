@@ -21,7 +21,7 @@ class PlayerViewController: BaseViewController{
     var bgImageView : UIImageView?
     var titleLabel : UILabel?
     
-    var timer : Timer?
+//    var timer : Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +38,6 @@ class PlayerViewController: BaseViewController{
         
         let playingMusic = PlayerManager.shared.musics[PlayerManager.shared.playingIndex]
         music = music == playingMusic ? music : playingMusic
- 
         PlayerManager.shared.delegate = self
     }
     
@@ -135,12 +134,12 @@ extension PlayerViewController {
             PlayerManager.shared.play(music : PlayerManager.shared.musics[0])
         }
         playerView?.updateDurationTime()
-        startTimer()
+//        startTimer()
     }
     /// 暂停
     func pauseMusic() {
         PlayerManager.shared.pause()
-        stopTimer()
+//        stopTimer()
     }
     /// 下一曲
     func nextMusic() {
@@ -152,20 +151,20 @@ extension PlayerViewController {
     }
 }
 
-// MARK: - Timer
-extension PlayerViewController {
-    func startTimer() {
-        guard timer == nil else {
-            return
-        }
-        timer = Timer.scheduledTimer(timeInterval: 0.25, target: playerView!, selector: #selector(playerView?.updateProgressAndTime), userInfo: nil, repeats: true)
-    }
-    
-    func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-}
+//// MARK: - Timer
+//extension PlayerViewController {
+//    func startTimer() {
+//        guard timer == nil else {
+//            return
+//        }
+//        timer = Timer.scheduledTimer(timeInterval: 0.25, target: playerView!, selector: #selector(playerView?.updateProgressAndTime), userInfo: nil, repeats: true)
+//    }
+//    
+//    func stopTimer() {
+//        timer?.invalidate()
+//        timer = nil
+//    }
+//}
 
 // MARK: - PlayerViewDelegate
 extension PlayerViewController : PlayerViewDelegate {
@@ -181,20 +180,22 @@ extension PlayerViewController : PlayerViewDelegate {
     func playerView(_ playerView: PlayerView, preview: UIButton) {
         previousMusic()
     }
-    func playerView(_ playerView: PlayerView, pressProgressSliedr: UISlider) {
-        print("pressProgressSliedr")
-    }
-    func playerView(_ playerView: PlayerView, progressSliderValueChanged: UISlider) {
-        print("progressSliderValueChanged")
-    }
-    func playerView(_ playerView: PlayerView, upInsideProgressSlider: UISlider) {
-        print("upInsideProgressSlider")
-    }
+//    func playerView(_ playerView: PlayerView, pressProgressSliedr: UISlider) {
+//        stopTimer()
+//        print("pressProgressSliedr")
+//    }
+//    func playerView(_ playerView: PlayerView, upInsideProgressSlider: UISlider) {
+//        startTimer()
+//        print("upInsideProgressSlider")
+//    }
 }
 
 // MARK: - PlayerManagerDelegate
 extension PlayerViewController : PlayerManagerDelegate {
     func playerManager(_ playerManager: PlayerManager, playingMusic: MPMediaItem) {
         self.music = playingMusic
+    }
+    func playerManagerUpdateProgressAndTime(_ playerManager: PlayerManager) {
+        playerView?.updateProgressAndTime()
     }
 }

@@ -79,7 +79,9 @@ extension PlayerView {
         progressSlider?.setMinimumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_curr").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
         progressSlider?.setMaximumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_ready").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
         progressSlider?.setThumbImage(#imageLiteral(resourceName: "cm2_fm_playbar_btn").tta_combineAtCenter(with: #imageLiteral(resourceName: "cm2_fm_playbar_btn_dot")), for: .normal)
-        //TODO: 给 progressSlider添加事件
+        progressSlider?.addTarget(self, action: #selector(pressAction(slider:)), for: .touchDown)
+        progressSlider?.addTarget(self, action: #selector(valueChangedAction(slider:)), for: .valueChanged)
+        progressSlider?.addTarget(self, action: #selector(upInsideAction(slider:)), for: .touchUpInside)
         
         // add
         self.addSubview(blurView)
@@ -168,20 +170,22 @@ extension PlayerView {
         }
     }
 /** ------------------- progressSlider -------------------------- */
-    /// 点击事件
+    /// 点击事件    停止定时器
     func pressAction(slider : UISlider) {
         if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:pressProgressSliedr:))) {
             delegate?.playerView?(self, pressProgressSliedr: progressSlider!)
         }
     }
-    /// 拖动事件
+    /// 拖动事件    更新播放时间与进度条
     func valueChangedAction(slider : UISlider) {
-        if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:progressSliderValueChanged:))) {
-            delegate?.playerView?(self, progressSliderValueChanged: progressSlider!)
+        guard let value = progressSlider?.value else {
+            return
         }
+        currentTimeLabel?.text = PlayerManager.shared.getTimeString(with: TimeInterval(value))
     }
-    /// 松开手指事件
+    /// 松开手指事件  设置播放时间,开启定时器
     func upInsideAction(slider : UISlider) {
+        PlayerManager.shared.currentTime = slider.value
         if let _ = delegate?.responds(to: #selector(delegate?.playerView(_:upInsideProgressSlider:))) {
             delegate?.playerView?(self, upInsideProgressSlider: progressSlider!)
         }
