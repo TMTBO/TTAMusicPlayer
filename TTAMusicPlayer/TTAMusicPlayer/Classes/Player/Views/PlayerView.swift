@@ -78,7 +78,7 @@ extension PlayerView {
         
         progressSlider?.setMinimumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_curr").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
         progressSlider?.setMaximumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_ready").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)
-        progressSlider?.setThumbImage(#imageLiteral(resourceName: "cm2_fm_playbar_btn").tta_combine(with: #imageLiteral(resourceName: "cm2_fm_playbar_btn_dot")), for: .normal)
+        progressSlider?.setThumbImage(#imageLiteral(resourceName: "cm2_fm_playbar_btn").tta_combineAtCenter(with: #imageLiteral(resourceName: "cm2_fm_playbar_btn_dot")), for: .normal)
         //TODO: 给 progressSlider添加事件
         
         // add
