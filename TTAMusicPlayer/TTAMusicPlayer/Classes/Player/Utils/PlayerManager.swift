@@ -15,6 +15,7 @@ let kNONE_TIME = "00:00"
 @objc protocol PlayerManagerDelegate : NSObjectProtocol {
     @objc optional func playerManager(_ playerManager : PlayerManager, playingMusic : MPMediaItem)
     @objc optional func playerManagerUpdateProgressAndTime(_ playerManager : PlayerManager)
+    @objc optional func playerManager(_ playerManager : PlayerManager, conrtolMusicIconAnimation isPause : Bool)
 }
 
 class PlayerManager: NSObject {
@@ -23,6 +24,7 @@ class PlayerManager: NSObject {
         didSet { // 这里要先将之前的一个计时器停掉,不然的切换音乐后,进入界面后不会更新进度条与播放时间
             stopTimer()
             startTimer()
+            controlMusicIconAnimation(with: false)
         }
     }
     /// 播放器
@@ -115,6 +117,7 @@ extension PlayerManager {
             switchPlayerMusicInfo()
             updateLockScreen(with: 1.0)
         }
+        controlMusicIconAnimation(with: false)
         audioPlayer?.play()
         startTimer()
         print("PlayMusic: \(music.title!)")
@@ -123,6 +126,7 @@ extension PlayerManager {
     func pause() {
         if let _ = audioPlayer?.isPlaying {
             updateLockScreen(with: 0.0)
+            controlMusicIconAnimation(with: true)
             audioPlayer?.pause()
             stopTimer()
             print("PauseMusic")
@@ -150,6 +154,11 @@ extension PlayerManager {
     func switchPlayerMusicInfo() {
         if let _ = self.delegate?.responds(to: #selector(self.delegate?.playerManager(_:playingMusic:))) {
             self.delegate?.playerManager?(self, playingMusic: musics[playingIndex])
+        }
+    }
+    func controlMusicIconAnimation(with isPause : Bool) {
+        if let _ = delegate?.responds(to: #selector(delegate?.playerManager(_:conrtolMusicIconAnimation:))) {
+            delegate?.playerManager?(self, conrtolMusicIconAnimation: isPause)
         }
     }
 }

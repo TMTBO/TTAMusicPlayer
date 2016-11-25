@@ -87,14 +87,6 @@ extension PlayerView {
         progressSlider?.addTarget(self, action: #selector(valueChangedAction(slider:)), for: .valueChanged)
         progressSlider?.addTarget(self, action: #selector(upInsideAction(slider:)), for: .touchUpInside)
         
-        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-        animation.duration = 20
-        animation.toValue = 2 * M_PI
-        animation.repeatCount = MAXFLOAT
-        animation.isRemovedOnCompletion = false
-        animation.fillMode = kCAFillModeForwards
-        animation.speed = 1.0
-        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
         
         // add
         self.addSubview(blurView)
@@ -162,6 +154,17 @@ extension PlayerView {
         let iconImage = image.tta_clip(image: image, with: CGRect(x: 0, y: 0, width: 215 * kSCALEP, height: 215 * kSCALEP))
         iconImageView?.image = #imageLiteral(resourceName: "cm2_play_disc").tta_combineAtCenter(with: iconImage!)
     }
+    /// 给中间歌曲图片添加动画
+    func addAnimationToIconImageView() {
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        animation.duration = 20
+        animation.toValue = 2 * M_PI
+        animation.repeatCount = MAXFLOAT
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        animation.speed = 1.0
+        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
+    }
 }
 
 // MARK: - Actions
@@ -172,12 +175,12 @@ extension PlayerView {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:pause:))) else { return }
             self.delegate?.playerView?(self, pause: self.playAndPauseButton!)
             self.configPauseButton()
-            stopIconImageViewAnmation()
+//            stopIconImageViewAnmation()
         } else {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:play:))) else { return }
             self.delegate?.playerView?(self, play: self.playAndPauseButton!)
             self.configPlayButton()
-            startIconImageViewAnmation()
+//            startIconImageViewAnmation()
         }
     }
     /// 下一曲
@@ -217,6 +220,10 @@ extension PlayerView {
     }
 /** ------------------- iconImageView动画 -------------------------- */
     func startIconImageViewAnmation() {
+        if let _ = iconImageView?.layer.animation(forKey: kICON_IMAGE_ROTATION_KEY) {
+        } else {
+            addAnimationToIconImageView()
+        }
         let pausedTime:CFTimeInterval = layer.timeOffset // 当前层的暂停时间
         /** 层动画时间的初始化值 **/
         self.layer.speed = 1.0
@@ -226,6 +233,7 @@ extension PlayerView {
         let timeSincePause : CFTimeInterval = (iconImageView?.layer.convertTime(CACurrentMediaTime(),from:nil))!
         let timePause = timeSincePause - pausedTime //计算从哪里开始恢复动画
         layer.beginTime = timePause //让层的动画从停止的位置恢复动效
+        
     }
     func stopIconImageViewAnmation() {
         //申明一个暂停时间为这个层动画的当前时间

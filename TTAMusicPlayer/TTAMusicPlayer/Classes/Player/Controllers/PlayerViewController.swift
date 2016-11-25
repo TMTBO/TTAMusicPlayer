@@ -173,4 +173,11 @@ extension PlayerViewController : PlayerManagerDelegate {
     func playerManagerUpdateProgressAndTime(_ playerManager: PlayerManager) {
         playerView?.updateProgressAndTime()
     }
+    func playerManager(_ playerManager: PlayerManager, conrtolMusicIconAnimation isPause: Bool) {
+        if isPause {
+            playerView?.stopIconImageViewAnmation()
+        } else {
+            playerView?.startIconImageViewAnmation()
+        }
+    }
 }
