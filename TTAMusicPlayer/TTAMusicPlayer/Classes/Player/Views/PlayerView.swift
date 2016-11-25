@@ -87,6 +87,15 @@ extension PlayerView {
         progressSlider?.addTarget(self, action: #selector(valueChangedAction(slider:)), for: .valueChanged)
         progressSlider?.addTarget(self, action: #selector(upInsideAction(slider:)), for: .touchUpInside)
         
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        animation.duration = 20
+        animation.toValue = 2 * M_PI
+        animation.repeatCount = MAXFLOAT
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = kCAFillModeForwards
+        animation.speed = 1.0
+        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
+        
         // add
         self.addSubview(blurView)
         self.addSubview(playAndPauseButton!)
@@ -208,34 +217,20 @@ extension PlayerView {
     }
 /** ------------------- iconImageView动画 -------------------------- */
     func startIconImageViewAnmation() {
-//        if let currentAnimation = iconImageView?.layer.animation(forKey: kICON_IMAGE_ROTATION_KEY) {
-//            currentAnimation.speed = 1.0
-////            let pauseTime = iconImageView?.layer.timeOffset
-////            iconImageView?.layer.speed = 1.0
-////            iconImageView?.layer.beginTime = (iconImageView?.layer.convertTime(CACurrentMediaTime(), from: nil))! - pauseTime!
-//            return
-//        }
-        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-        animation.duration = 20
-        animation.toValue = 2 * M_PI
-        animation.repeatCount = MAXFLOAT
-        animation.isRemovedOnCompletion = false
-        animation.fillMode = kCAFillModeForwards
-        animation.speed = 1.0
-        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
+        let pausedTime:CFTimeInterval = layer.timeOffset // 当前层的暂停时间
+        /** 层动画时间的初始化值 **/
+        self.layer.speed = 1.0
+        self.layer.timeOffset = 0.0
+        self.layer.beginTime = 0.0
+        /** end **/
+        let timeSincePause : CFTimeInterval = (iconImageView?.layer.convertTime(CACurrentMediaTime(),from:nil))!
+        let timePause = timeSincePause - pausedTime //计算从哪里开始恢复动画
+        layer.beginTime = timePause //让层的动画从停止的位置恢复动效
     }
     func stopIconImageViewAnmation() {
-//        let animation = iconImageView?.layer.animation(forKey: kICON_IMAGE_ROTATION_KEY)
-//        animation?.speed = 0.0
-//        iconImageView?.layer.speed = 0.0
-//        iconImageView?.layer.timeOffset = (iconImageView?.layer.convertTime(CACurrentMediaTime(), from: nil))!
-        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-        animation.duration = 20
-        animation.toValue = 2 * M_PI
-        animation.repeatCount = MAXFLOAT
-        animation.isRemovedOnCompletion = false
-        animation.fillMode = kCAFillModeForwards
-        animation.speed = 0.0
-        iconImageView?.layer.add(animation, forKey: kICON_IMAGE_ROTATION_KEY)
+        //申明一个暂停时间为这个层动画的当前时间
+        let pausedTime : CFTimeInterval = (iconImageView?.layer.convertTime(CACurrentMediaTime(),from:nil))!
+        self.layer.speed = 0.0 //当前层的速度
+        layer.timeOffset = pausedTime //层的停止时间设为上面申明的暂停时间
     }
 }
