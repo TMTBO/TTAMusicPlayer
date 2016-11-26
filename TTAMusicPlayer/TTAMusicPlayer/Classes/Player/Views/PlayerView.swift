@@ -148,8 +148,8 @@ extension PlayerView {
     }
     /// 配置播放器中间的歌曲图片
     func configIconImageView(with image : UIImage) {
-        let iconImage = image.tta_clip(image: image, with: CGRect(x: 0, y: 0, width: 215 * kSCALEP, height: 215 * kSCALEP))
-        iconImageView?.image = #imageLiteral(resourceName: "cm2_play_disc").tta_combineAtCenter(with: iconImage!)
+        let iconImage = image.tta_clip(image: image, with: CGRect(x: 0, y: 0, width: 200 * kSCALEP, height: 200 * kSCALEP))
+        iconImageView?.image = #imageLiteral(resourceName: "cm2_play_disc").tta_combineAtCenter(with: #imageLiteral(resourceName: "cm2_playing_mask"))?.tta_combineAtCenter(with: iconImage!)
     }
     /// 给中间歌曲图片添加动画
     func addAnimationToIconImageView() {

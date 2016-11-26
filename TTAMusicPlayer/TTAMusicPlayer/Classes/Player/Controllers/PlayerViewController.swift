@@ -117,7 +117,7 @@ extension PlayerViewController {
         // background
         let bgImage = music?.artwork?.image(at: view.bounds.size)
         view.layer.contents = bgImage == nil ? #imageLiteral(resourceName: "cm2_default_play_bg").cgImage : bgImage?.cgImage
-        playerView?.configIconImageView(with: bgImage ?? #imageLiteral(resourceName: "cm2_default_play_bg"))
+        playerView?.configIconImageView(with: bgImage ?? #imageLiteral(resourceName: "cm2_default_cover_play"))
         // title
         configNavcTitle()
     }
@@ -129,8 +129,9 @@ extension PlayerViewController {
     func playMusic() {
         if let newMusic = music {
             PlayerManager.shared.play(music : newMusic)
-        } else {
-            PlayerManager.shared.play(music : PlayerManager.shared.musics[0])
+        } else { // 从用户偏好设置中读取上次播放信息
+            let musicURL = PlayerManager.shared.readNowPlayingMusicInfo()
+            PlayerManager.shared.play(musicURL : musicURL)
         }
         playerView?.updateDurationTime()
     }

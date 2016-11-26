@@ -11,6 +11,8 @@ import AVFoundation
 import MediaPlayer
 
 let kNONE_TIME = "00:00"
+let kNOW_PLAYING_MUSIC_INFO = "NowPlayingMusicInfo"
+let kNOW_PLAYING_MUSIC_URL = "NowPlayingMusicURL"
 
 @objc protocol PlayerManagerDelegate : NSObjectProtocol {
     @objc optional func playerManager(_ playerManager : PlayerManager, playingMusic : MPMediaItem)
@@ -32,7 +34,7 @@ class PlayerManager: NSObject {
     /// 所有音乐列表
     var musics : [MPMediaItem] = []
     /// 当前正在播放的音乐索引
-    var playingIndex : NSInteger = 0
+    var playingIndex : Int = 0
     
     var timer : Timer?
     
@@ -116,12 +118,36 @@ extension PlayerManager {
             }
             switchPlayerMusicInfo()
             updateLockScreen(with: 1.0)
+            saveNowPlayingMusicInfo(with: playingIndex, url: musicURL)
         }
         controlMusicIconAnimation(with: false)
         audioPlayer?.play()
         startTimer()
         print("PlayMusic: \(music.title!)")
     }
+    func play(musicURL : URL) {
+        var nowPlayMusic : MPMediaItem? = MPMediaItem()
+        if musicURL != audioPlayer?.url {
+            audioPlayer = try! AVAudioPlayer(contentsOf: musicURL)
+            audioPlayer?.delegate = self
+            audioPlayer?.prepareToPlay()
+            for (index, music) in musics.enumerated() {
+                if let assetURL = music.assetURL, assetURL == musicURL {
+                    self.playingIndex = index
+                    nowPlayMusic = music
+                    break
+                }
+            }
+            switchPlayerMusicInfo()
+            updateLockScreen(with: 1.0)
+            saveNowPlayingMusicInfo(with: playingIndex, url: musicURL)
+        }
+        controlMusicIconAnimation(with: false)
+        audioPlayer?.play()
+        startTimer()
+        print("PlayMusicURL: \(musicURL), Music: \(nowPlayMusic?.title ?? "未命名歌曲")")
+    }
+    
     /// 暂停
     func pause() {
         if let _ = audioPlayer?.isPlaying {
@@ -156,6 +182,7 @@ extension PlayerManager {
             self.delegate?.playerManager?(self, playingMusic: musics[playingIndex])
         }
     }
+    /// 控制音乐图片的转动动画
     func controlMusicIconAnimation(with isPause : Bool) {
         if let _ = delegate?.responds(to: #selector(delegate?.playerManager(_:conrtolMusicIconAnimation:))) {
             delegate?.playerManager?(self, conrtolMusicIconAnimation: isPause)
@@ -208,6 +235,22 @@ extension PlayerManager {
         if let _ = self.delegate?.responds(to: #selector(self.delegate?.playerManagerUpdateProgressAndTime(_:))) {
             self.delegate?.playerManagerUpdateProgressAndTime?(self)
         }
+    }
+}
+
+// MARK: - Save and read now playing music url in user default
+extension PlayerManager {
+    func readNowPlayingMusicInfo() -> URL {
+        if let userDefault = UserDefaults.standard.object(forKey: kNOW_PLAYING_MUSIC_INFO) as? [String : String] {
+            guard let urlString = userDefault[kNOW_PLAYING_MUSIC_URL] else { return musics[0].assetURL!}
+            return URL(string: urlString)!
+        }
+        return musics[0].assetURL!
+    }
+    
+    func saveNowPlayingMusicInfo(with musicIndex : Int, url: URL) {
+        let nowPlayingMusicInfoDic = [kNOW_PLAYING_MUSIC_URL : String(describing: url)]
+        UserDefaults.standard.set(nowPlayingMusicInfoDic, forKey: kNOW_PLAYING_MUSIC_INFO)
     }
 }
 
