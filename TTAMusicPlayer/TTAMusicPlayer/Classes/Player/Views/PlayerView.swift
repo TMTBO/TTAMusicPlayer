@@ -28,6 +28,7 @@ class PlayerView: UIView {
     var currentTimeLabel : UILabel? = UILabel()
     var durationTimeLabel : UILabel? = UILabel()
     var iconImageView : UIImageView? = UIImageView()
+    var playNeedelImageView : UIImageView? = UIImageView()
     
     /// 更新播放器显示的最大时间
     lazy var updateDurationTime : () -> Void = { _ in
@@ -84,6 +85,8 @@ extension PlayerView {
         progressSlider?.addTarget(self, action: #selector(valueChangedAction(slider:)), for: .valueChanged)
         progressSlider?.addTarget(self, action: #selector(upInsideAction(slider:)), for: .touchUpInside)
         
+        playNeedelImageView?.image = #imageLiteral(resourceName: "cm2_play_needle_play")
+        
         
         // add
         self.addSubview(blurView)
@@ -94,6 +97,7 @@ extension PlayerView {
         self.addSubview(durationTimeLabel!)
         self.addSubview(progressSlider!)
         self.addSubview(iconImageView!)
+        self.addSubview(playNeedelImageView!)
         
         // layout
         playAndPauseButton?.snp.makeConstraints({ (make) in
@@ -126,8 +130,12 @@ extension PlayerView {
         })
         iconImageView?.snp.makeConstraints { (make) in
             make.centerX.equalTo(self)
-            make.centerY.equalTo(self).offset(-50 * kSCALEP)
+            make.centerY.equalTo(self).offset(-40 * kSCALEP)
         }
+        playNeedelImageView?.snp.makeConstraints({ (make) in
+            make.left.equalTo(self.snp.centerX).offset(-26 * kSCALEP)
+            make.top.equalTo(64 - (22 * kSCALEP))
+        })
     }
     /// 配置播放按钮图片
     func configPlayButton() {
@@ -172,12 +180,10 @@ extension PlayerView {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:pause:))) else { return }
             self.delegate?.playerView?(self, pause: self.playAndPauseButton!)
             self.configPauseButton()
-//            stopIconImageViewAnmation()
         } else {
             guard let _ = delegate?.responds(to: #selector(delegate?.playerView(_:play:))) else { return }
             self.delegate?.playerView?(self, play: self.playAndPauseButton!)
             self.configPlayButton()
-//            startIconImageViewAnmation()
         }
     }
     /// 下一曲
@@ -217,21 +223,23 @@ extension PlayerView {
         } else {
             addAnimationToIconImageView()
         }
-        let pausedTime:CFTimeInterval = layer.timeOffset // 当前层的暂停时间
+        let layer = iconImageView?.layer
+        let pausedTime:CFTimeInterval = layer!.timeOffset // 当前层的暂停时间
         /** 层动画时间的初始化值 **/
-        self.layer.speed = 1.0
-        self.layer.timeOffset = 0.0
-        self.layer.beginTime = 0.0
+        layer!.speed = 1.0
+        layer!.timeOffset = 0.0
+        layer!.beginTime = 0.0
         /** end **/
-        let timeSincePause : CFTimeInterval = (iconImageView?.layer.convertTime(CACurrentMediaTime(),from:nil))!
+        let timeSincePause : CFTimeInterval = layer!.convertTime(CACurrentMediaTime(),from:nil)
         let timePause = timeSincePause - pausedTime //计算从哪里开始恢复动画
-        layer.beginTime = timePause //让层的动画从停止的位置恢复动效
+        layer!.beginTime = timePause //让层的动画从停止的位置恢复动效
         
     }
     func stopIconImageViewAnmation() {
         //申明一个暂停时间为这个层动画的当前时间
-        let pausedTime : CFTimeInterval = (iconImageView?.layer.convertTime(CACurrentMediaTime(),from:nil))!
-        self.layer.speed = 0.0 //当前层的速度
-        layer.timeOffset = pausedTime //层的停止时间设为上面申明的暂停时间
+        let layer = iconImageView?.layer
+        let pausedTime : CFTimeInterval = layer!.convertTime(CACurrentMediaTime(),from:nil)
+        layer!.speed = 0.0 //当前层的速度
+        layer!.timeOffset = pausedTime //层的停止时间设为上面申明的暂停时间
     }
 }

@@ -29,6 +29,7 @@ class PlayerViewController: BaseViewController{
         view.layer.masksToBounds = true
         
         playMusic()
+        PlayerManager.shared.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,7 +37,6 @@ class PlayerViewController: BaseViewController{
         
         let playingMusic = PlayerManager.shared.musics[PlayerManager.shared.playingIndex]
         music = music == playingMusic ? music : playingMusic
-        PlayerManager.shared.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,6 +63,7 @@ extension PlayerViewController {
         // bgView
         let blur = UIBlurEffect(style: .dark)
         let bgView = UIVisualEffectView(effect: blur)
+//        bgView.contentView.layer.contents = #imageLiteral(resourceName: "cm2_default_play_bg").cgImage
         bgView.alpha = 0.3
         
         // lineView
