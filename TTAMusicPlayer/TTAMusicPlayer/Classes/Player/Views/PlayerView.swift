@@ -75,7 +75,6 @@ extension PlayerView {
         
         durationTimeLabel?.font = UIFont.systemFont(ofSize: 15 * kSCALEP)
         durationTimeLabel?.textAlignment = .center
-        durationTimeLabel?.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         durationTimeLabel?.text = kNONE_TIME
         
         progressSlider?.setMinimumTrackImage(#imageLiteral(resourceName: "cm2_fm_playbar_curr").resizableImage(withCapInsets: .init(top: 0.5, left: 0.5, bottom: 0.5, right: 0.5)), for: .normal)

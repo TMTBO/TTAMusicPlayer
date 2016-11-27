@@ -20,6 +20,7 @@ class PlayerViewController: BaseViewController{
     var playerView : PlayerView?
     var bgImageView : UIImageView?
     var titleLabel : UILabel?
+    var navBgView : UIVisualEffectView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,10 +62,9 @@ extension PlayerViewController {
     
     func configNavcBar() {
         // bgView
-        let blur = UIBlurEffect(style: .dark)
-        let bgView = UIVisualEffectView(effect: blur)
-//        bgView.contentView.layer.contents = #imageLiteral(resourceName: "cm2_default_play_bg").cgImage
-        bgView.alpha = 0.3
+        let blur = UIBlurEffect(style: .light)
+        navBgView = UIVisualEffectView(effect: blur)
+        navBgView?.backgroundColor = UIColor.clear
         
         // lineView
         let lineView = UIView(frame: CGRect(x: 0, y: 64, width: kSCREEN_WIDTH, height: 1.0 / kSCREEN_SCALE))
@@ -74,17 +74,17 @@ extension PlayerViewController {
         titleLabel = UILabel()
         titleLabel?.numberOfLines = 0
         titleLabel?.textAlignment = .center
-        configNavcTitle()
+        configNavcTitle(with: .black)
         
         // add
-        view.addSubview(bgView)
+        view.addSubview(navBgView!)
         view.addSubview(backButton!)
         view.addSubview(titleLabel!)
         view.addSubview(lineView)
         
         
         // layout
-        bgView.snp.makeConstraints { (make) in
+        navBgView?.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(view)
             make.height.equalTo(64)
         }
@@ -98,15 +98,15 @@ extension PlayerViewController {
         })
     }
     
-    func configNavcTitle() {
+    func configNavcTitle(with color : UIColor) {
         guard let currentMusic = music else {
             titleLabel?.text = "Music"
             titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
             titleLabel?.sizeToFit()
             return
         }
-        let nameAttributeString = NSMutableAttributedString(string: currentMusic.title! + "\n", attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 15), NSForegroundColorAttributeName : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)])
-        let singerAttributeString = NSMutableAttributedString(string: currentMusic.artist!, attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 12), NSForegroundColorAttributeName : #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)])
+        let nameAttributeString = NSMutableAttributedString(string: (currentMusic.title ?? "音乐") + "\n", attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 15), NSForegroundColorAttributeName : color])
+        let singerAttributeString = NSMutableAttributedString(string: currentMusic.artist ?? "专集", attributes: [NSFontAttributeName : UIFont.boldSystemFont(ofSize: 12), NSForegroundColorAttributeName : color])
         
         nameAttributeString.append(singerAttributeString)
         
@@ -117,10 +117,13 @@ extension PlayerViewController {
     func configMusicInfo() {
         // background
         let bgImage = music?.artwork?.image(at: view.bounds.size)
-        view.layer.contents = bgImage == nil ? #imageLiteral(resourceName: "cm2_default_play_bg").cgImage : bgImage?.cgImage
+        let realBgImage = bgImage == nil ? #imageLiteral(resourceName: "cm2_default_play_bg") : bgImage
+        view.layer.contents = realBgImage?.cgImage
+        let point = CGPoint(x: view.center.x, y: 32)
+        let color = bgImage?.tta_pickColor(from: point)
         playerView?.configIconImageView(with: bgImage ?? #imageLiteral(resourceName: "cm2_default_cover_play"))
         // title
-        configNavcTitle()
+        configNavcTitle(with: color ?? .black)
     }
 }
 
